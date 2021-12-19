@@ -1,1 +1,36 @@
-<p>contactform works!</p>
+<div class="container">
+    <h1 *ngIf="itemId==0"class="text-center">Add Contact</h1>
+    <h1 *ngIf="itemId>0" class="text-center">Edit Contact</h1>
+   <mat-card>
+<form class="example-form a-shadow-sm mt-3" [formGroup]="contactForm" (ngSubmit)="onAdd()">
+   <div class="row">
+       <mat-form-field appearance="outline">
+           <mat-label>First Name</mat-label>
+           <input maxlength="35" matInput placeholder="Enter the name of item" formControlName="firstName">
+           <mat-error *ngIf="controls.firstName.invalid">{{errMsg.firstName}}</mat-error>
+         </mat-form-field>
+   </div>
+   <div class="row">
+       <mat-form-field appearance="outline">
+           <mat-label>Last Name</mat-label>
+           <textarea maxlength="300" matInput placeholder="Enter the description of item" formControlName="lastName"></textarea>
+           <mat-error *ngIf="controls.lastName.invalid">{{errMsg.lastName}}</mat-error>
+         </mat-form-field>
+          
+   </div>
+   <div class="row">
+       <mat-form-field appearance="outline">
+       <mat-label>phone</mat-label>
+       <input max="9999999999" matInput type="number" class="fa fa-inr" placeholder="Enter the price of item" formControlName="phone">
+       <mat-error *ngIf="controls.phone.invalid">{{errMsg.phone}}</mat-error>
+     </mat-form-field>
+   </div>
+   
+ </form>
+</mat-card>
+<div class="mt-2 text-center">
+   <button  (click)="onClose()" class=" btn btn-danger mx-1">Cancel</button>
+   <button  *ngIf="itemId==0" (click)="onAdd()" class="btn btn-primary mx-1">Add</button>
+   <button  *ngIf="itemId>0" (click)="onEdit()" class="btn btn-primary mx-1">Edit</button>
+</div>
+</div>
