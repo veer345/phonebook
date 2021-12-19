@@ -28,12 +28,7 @@ export class PhonebookComponent implements OnInit {
    this.phoneService.getPhonebookData().subscribe(result=>{
      console.log(result)
     this.phonebookData=result;
-    console.log(this.phonebookData)
-    this.dataSource=new MatTableDataSource(this.phonebookData)
-    console.log(this.dataSource)
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
+    this.refreshDataSource()
    })
   }
   onAdd(){
@@ -43,6 +38,8 @@ export class PhonebookComponent implements OnInit {
   let data
    if(id>0)
   data=this.phonebookData.filter(item=>item.id==id)[0]
+  else
+   data=0
   console.log(data)
   const dialogRef = this.dialog.open(ContactformComponent,{
     autoFocus:false,
@@ -52,20 +49,37 @@ export class PhonebookComponent implements OnInit {
   });
 
   dialogRef.afterClosed().subscribe((result) => {
-    console.log(result)
+    if(result){
+    if(result.id){
+      for (var i = 0; i < this.phonebookData.length; i++) {
+        if (this.phonebookData[i].id === result.id) {
+          this.phonebookData[i]=result;
+          break;
+        }
+      }
+    }
+    else{
     let tempId=this.phonebookData[this.phonebookData.length - 1].id
     result.id=tempId+1
     this.phonebookData.push(result)
-    this.dataSource=new MatTableDataSource(this.phonebookData)
+    }
+    this.refreshDataSource()
+  }
      });
 }
 onDelete(id:number)
 { this.phonebookData=this.phonebookData.filter(item=>item.id!==id)
-  this.dataSource=new MatTableDataSource(this.phonebookData)
+  this.refreshDataSource()
+  alert(`Contact with ID : ${id} Deleted Successfully`)
 }
 onEdit(id:number)
 {
   console.log(id)
  this.openDialog(id)
+}
+refreshDataSource(){
+  this.dataSource=new MatTableDataSource(this.phonebookData)
+  this.dataSource.paginator = this.paginator;
+  this.dataSource.sort = this.sort;
 }
 }
